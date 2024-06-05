@@ -4,7 +4,7 @@ from src.server.responsibility_chain.CheckLocalFileCommand import CheckLocalFile
 from src.server.responsibility_chain.QuarantineLocalFileCommand import QuarantineLocalFileCommand
 
 if __name__ == "__main__":
-    HOST, PORT = "localhost", 1500
+    HOST, PORT = "localhost", 1414
     MAX_THREADS = 10
 
     server_address = (HOST, PORT)
@@ -13,7 +13,7 @@ if __name__ == "__main__":
     quarantine_command = QuarantineLocalFileCommand()
     command_chain.add_next(quarantine_command)
 
-    quarantine_path = '/home/kekov/Downloads/quarantine'
+    quarantine_path = '/home/kekov/Documents/239'
 
     server = ThreadedTCPServer(
         server_address,

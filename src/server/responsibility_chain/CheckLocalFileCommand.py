@@ -11,20 +11,7 @@ class CheckLocalFileCommand(CommandBase):
             required_params = {"param1", "param2"}
             provided_params = set(data["params"].keys())
 
-            missing_params = required_params - provided_params
-            extra_params = provided_params - required_params
-
-            error_messages = []
-            if missing_params:
-                error_messages.append(f"Parameters missing: {', '.join(missing_params)}")
-            if extra_params:
-                error_messages.append(f"Extra parameters provided: {', '.join(extra_params)}")
-
-            if error_messages:
-                response = ("Invalid query format. " + ", ".join(error_messages)).encode("utf-8")
-                request.sendall(response)
-                logger.info("Invalid query format. " + ", ".join(error_messages))
-                request.close()
+            if not self._verify_params(required_params, provided_params, request):
                 return
 
             local_file_path = data.get("params", {}).get("param1")
