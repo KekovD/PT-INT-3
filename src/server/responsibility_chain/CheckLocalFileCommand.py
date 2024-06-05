@@ -8,12 +8,22 @@ from src.server.responsibility_chain.CommandBase import CommandBase
 class CheckLocalFileCommand(CommandBase):
     def handle(self, request, data: json, server):
         if data.get("command") == 'CheckLocalFile':
+            required_params = {"param1", "param2"}
+            provided_params = set(data["params"].keys())
 
-            missing_params = {"param1", "param2"} - set(data["params"].keys())
+            missing_params = required_params - provided_params
+            extra_params = provided_params - required_params
+
+            error_messages = []
             if missing_params:
-                response = f"Invalid query format. Parameters missing: {', '.join(missing_params)}.".encode("utf-8")
+                error_messages.append(f"Parameters missing: {', '.join(missing_params)}")
+            if extra_params:
+                error_messages.append(f"Extra parameters provided: {', '.join(extra_params)}")
+
+            if error_messages:
+                response = ("Invalid query format. " + ", ".join(error_messages)).encode("utf-8")
                 request.sendall(response)
-                logger.info(f"Invalid query format. Parameters missing: {', '.join(missing_params)}.")
+                logger.info("Invalid query format. " + ", ".join(error_messages))
                 request.close()
                 return
 
@@ -69,7 +79,7 @@ class CheckLocalFileCommand(CommandBase):
                 request.close()
 
         elif self.next is not None:
-            self.next.handle(request, data)
+            self.next.handle(request, data, server)
 
         else:
             response = f"Unknown command '{data}.".encode("utf-8")

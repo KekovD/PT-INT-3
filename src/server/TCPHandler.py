@@ -10,12 +10,21 @@ class TCPHandler:
         self.request = request
         self.client_address = client_address
         self.server = server
-        self.handle()
         self.command_chain = command_chain
+        self.handle()
 
     def handle(self) -> None:
-        self.data = self.request.recv(1024).strip()
-        self.data = json.loads(self.data)
+        try:
+            self.data = self.request.recv(1024).strip()
+            self.data = json.loads(self.data)
+
+        except json.JSONDecodeError:
+            response = "Invalid JSON format. Request must be in JSON format.".encode("utf-8")
+            self.request.sendall(response)
+            logger.warning("Invalid JSON format. Request must be in JSON format.")
+            self.request.close()
+            return
+
         self.validate_request(self.data)
         self.command_chain.handle(self.request, self.data, self.server)
 

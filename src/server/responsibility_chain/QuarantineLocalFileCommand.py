@@ -9,11 +9,22 @@ from src.server.responsibility_chain.CommandBase import CommandBase
 class QuarantineLocalFileCommand(CommandBase):
     def handle(self, request, data: json, server):
         if data.get("command") == 'QuarantineLocalFile':
+            required_params = {"param1"}
+            provided_params = set(data["params"].keys())
 
-            if set(data["params"].keys()) != {"param1"}:
-                response = f"Invalid query format. param1 missing in param.".encode("utf-8")
+            missing_params = required_params - provided_params
+            extra_params = provided_params - required_params
+
+            error_messages = []
+            if missing_params:
+                error_messages.append(f"Parameters missing: {', '.join(missing_params)}")
+            if extra_params:
+                error_messages.append(f"Extra parameters provided: {', '.join(extra_params)}")
+
+            if error_messages:
+                response = ("Invalid query format. " + ", ".join(error_messages)).encode("utf-8")
                 request.sendall(response)
-                logger.info("Invalid query format. param1 missing in param")
+                logger.info("Invalid query format. " + ", ".join(error_messages))
                 request.close()
                 return
 
@@ -55,7 +66,7 @@ class QuarantineLocalFileCommand(CommandBase):
                 request.close()
 
         elif self.next is not None:
-            self.next.handle(request, data)
+            self.next.handle(request, data, server)
 
         else:
             response = f"Unknown command '{data}.".encode("utf-8")

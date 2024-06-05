@@ -4,7 +4,7 @@ from src.server.responsibility_chain.CheckLocalFileCommand import CheckLocalFile
 from src.server.responsibility_chain.QuarantineLocalFileCommand import QuarantineLocalFileCommand
 
 if __name__ == "__main__":
-    HOST, PORT = "localhost", 1414
+    HOST, PORT = "localhost", 1500
     MAX_THREADS = 10
 
     server_address = (HOST, PORT)
