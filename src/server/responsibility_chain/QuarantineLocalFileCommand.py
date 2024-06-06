@@ -45,7 +45,7 @@ class QuarantineLocalFileCommand(CommandBase):
 
     def __move_file_to_quarantine(self, src_path: str, dest_path: str, request: socket.socket) -> None:
         try:
-            shutil.move(src_path, dest_path)
+            self.__move_with_suffix(src_path, dest_path)
             message = f"File moved from {src_path} to quarantine {dest_path}"
             self._send_response(request, message, logger.info)
         except FileNotFoundError:
@@ -54,3 +54,24 @@ class QuarantineLocalFileCommand(CommandBase):
             self._send_response(request, f"Permission denied to {src_path}", logger.warning)
         except Exception as e:
             self._send_response(request, f"Error moving a file to quarantine: {e}", logger.error)
+
+    def __move_with_suffix(self, src_path: str, dest_path: str) -> None:
+        if os.path.exists(dest_path) and os.path.isdir(dest_path):
+            dest_path = os.path.join(dest_path, os.path.basename(src_path))
+
+        original_dst = dest_path
+
+        counter = 1
+        while os.path.exists(dest_path):
+            dest_path = self.__add_suffix(original_dst, counter)
+            counter += 1
+
+        shutil.move(src_path, dest_path)
+
+    @staticmethod
+    def __add_suffix(path: str, counter: int) -> str:
+        dirname, basename = os.path.split(path)
+        name, ext = os.path.splitext(basename)
+        new_basename = f"{name}({counter}){ext}"
+
+        return os.path.join(dirname, new_basename)
