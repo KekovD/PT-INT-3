@@ -25,10 +25,12 @@ class TCPHandler:
             self.request.close()
             return
 
-        self.validate_request(self.data)
+        if not self.validate_request(self.data):
+            return
+
         self.command_chain.handle(self.request, self.data, self.server)
 
-    def validate_request(self, request: json) -> None:
+    def validate_request(self, request: json) -> bool:
         if request:
             required_keys = {"command", "params"}
             actual_keys = set(request.keys())
@@ -51,12 +53,14 @@ class TCPHandler:
                 self.request.sendall(response)
                 logger.warning(f"Invalid query format. {combined_error_message}")
                 self.request.close()
-                return
+                return False
 
             logger.info("Request is valid")
+            return True
 
         else:
             response = "Request is empty".encode("utf-8")
             self.request.sendall(response)
             logger.warning("Request is empty")
             self.request.close()
+            return False

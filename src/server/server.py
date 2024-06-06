@@ -3,6 +3,7 @@ from src.server.ThreadedTCPServer import ThreadedTCPServer
 from src.server.responsibility_chain.CheckLocalFileCommand import CheckLocalFileCommand
 from src.server.responsibility_chain.QuarantineLocalFileCommand import QuarantineLocalFileCommand
 
+
 if __name__ == "__main__":
     HOST, PORT = "localhost", 1414
     MAX_THREADS = 10
