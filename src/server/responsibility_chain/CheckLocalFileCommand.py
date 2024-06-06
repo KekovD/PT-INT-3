@@ -37,7 +37,7 @@ class CheckLocalFileCommand(CommandBase):
             if len(signature) > 1024:
                 self._send_response(
                     request,
-                    "Invalid query format. Signature is too long.",
+                    "Invalid query format. Signature is too large.",
                     logger.info
                 )
                 return
