@@ -51,7 +51,6 @@ class TCPHandler(TCPHandlerBase):
                 self.request.close()
                 return False
 
-            logger.info("Request is valid")
             return True
 
         else:
