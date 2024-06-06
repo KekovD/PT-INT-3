@@ -1,5 +1,5 @@
-import base64
 import json
+from typing import List, Callable
 
 from src.server.config import logger
 from src.server.responsibility_chain.CommandBase import CommandBase
@@ -24,52 +24,51 @@ class CheckLocalFileCommand(CommandBase):
                 if signature is None:
                     missing_params.append("param2")
 
-                response = f"Invalid query format. Parameters missing: {', '.join(missing_params)}.".encode("utf-8")
-                request.sendall(response)
-                logger.info(f"Invalid query format. Parameters missing: {', '.join(missing_params)}.")
-                request.close()
+                self._send_response(
+                    request,
+                    f"Invalid query format. Parameters missing: {', '.join(missing_params)}.",
+                    logger.info
+                )
                 return
 
             signature = signature.encode("utf-8")
 
             if len(signature) > 1024:
-                response = "Invalid query format. Signature is too long.".encode("utf-8")
-                request.sendall(response)
-                logger.info(f"Invalid query format. Signature is too long.")
-                request.close()
+                self._send_response(
+                    request,
+                    "Invalid query format. Signature is too long.",
+                    logger.info
+                )
                 return
 
-            try:
-                with open(local_file_path, 'rb') as file:
-                    file_content = file.read()
-                    signature_offsets = []
-                    offset = file_content.find(signature)
-                    while offset != -1:
-                        signature_offsets.append(offset)
-                        offset = file_content.find(signature, offset + 1)
-
-                response = f"Signature offsets: {signature_offsets}".encode("utf-8")
-                request.sendall(response)
-                logger.info(f"Signature offsets: {signature_offsets}, file: {local_file_path}, signature: {signature}")
-                request.close()
-
-            except FileNotFoundError:
-                response = f"File not found: {local_file_path}".encode("utf-8")
-                request.sendall(response)
-                logger.warning(f"File not found: {local_file_path}")
-                request.close()
-
-            except Exception as e:
-                response = "Error processing file".encode("utf-8")
-                request.sendall(response)
-                logger.error(f"Error processing file: {str(e)}")
-                request.close()
+            self.check_file_signature(local_file_path, signature, request)
 
         elif self.next is not None:
             self.next.handle(request, data, server)
-
         else:
-            response = f"Unknown command '{data}.".encode("utf-8")
-            request.sendall(response)
-            logger.warning(f"Unknown command '{data}.'")
-            request.close()
+            self._send_response(request, f"Unknown command '{data}'.", logger.warning)
+
+    def check_file_signature(self, file_path: str, signature: bytes, request):
+        try:
+            with open(file_path, 'rb') as file:
+                file_content = file.read()
+                signature_offsets = self.__find_signature_offsets(file_content, signature)
+
+            self._send_response(
+                request,
+                f"Signature offsets: {signature_offsets}",
+                lambda msg: logger.info(f"{msg}, file: {file_path}, signature: {signature}")
+            )
+        except FileNotFoundError:
+            self._send_response(request, f"File not found: {file_path}", logger.warning)
+        except Exception as e:
+            self._send_response(request, "Error processing file", lambda msg: logger.error(f"{msg}: {str(e)}"))
+
+    @staticmethod
+    def __find_signature_offsets(content: bytes, signature: bytes) -> List[int]:
+        offsets = []
+        offset = content.find(signature)
+        while offset != -1:
+            offsets.append(offset)
+            offset = content.find(signature, offset + 1)
+        return offsets

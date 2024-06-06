@@ -34,6 +34,13 @@ class CommandBase(ABC):
         
         return True
 
+    @staticmethod
+    def _send_response(request, message, log_func):
+        response = message.encode("utf-8")
+        request.sendall(response)
+        log_func(message)
+        request.close()
+
     @abstractmethod
     def handle(self, request, data: json, server):
         pass
