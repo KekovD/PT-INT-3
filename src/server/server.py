@@ -16,7 +16,7 @@ def parse_arguments():
     return parser.parse_args()
 
 
-if __name__ == "__main__":
+def main() -> None:
     args = parse_arguments()
 
     server_address = (args.HOST, args.PORT)
@@ -38,3 +38,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         server.stop()
         print("Server stopped")
+
+
+if __name__ == "__main__":
+    main()
