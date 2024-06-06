@@ -21,6 +21,10 @@ class ThreadedTCPServer:
         self.command_chain = command_chain
 
     def start(self) -> None:
+        if self.max_threads <= 0:
+            print(f"The thread number {self.max_threads} must be positive and non-null")
+            return
+
         with ThreadPoolExecutor(max_workers=self.max_threads) as executor:
             self.is_running = True
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
