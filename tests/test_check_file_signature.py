@@ -19,7 +19,7 @@ def test_check_file_signature(start_server, start_client):
     massages = [
         "Received: Signature offsets: [11, 224, 1923, 4326]",
         "Received: File not found: /nonexistent/file/tmp",
-        # "Received: Error processing file",
+        # f"Received: Permission denied to {protected_file_path}",
     ]
 
     for params, massage in zip(client_params_list, massages):

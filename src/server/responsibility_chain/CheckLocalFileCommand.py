@@ -63,6 +63,8 @@ class CheckLocalFileCommand(CommandBase):
             )
         except FileNotFoundError:
             self._send_response(request, f"File not found: {file_path}", logger.warning)
+        except PermissionError:
+            self._send_response(request, f"Permission denied to {file_path}", logger.warning)
         except Exception as e:
             self._send_response(request, "Error processing file", lambda msg: logger.error(f"{msg}: {str(e)}"))
 
