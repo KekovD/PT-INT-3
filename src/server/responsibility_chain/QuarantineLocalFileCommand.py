@@ -21,7 +21,8 @@ class QuarantineLocalFileCommand(CommandBase):
             local_file_path = data.get("params", {}).get("param1")
 
             if local_file_path == "":
-                self._send_response(request, "Invalid query format. Local file path missing in param1.", logger.info)
+                self._send_response(
+                    request, "Invalid query format. Local file path cannot be empty in param1.", logger.info)
                 return
 
             self.__ensure_directory_exists(server.quarantine_path, request)

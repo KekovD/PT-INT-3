@@ -21,14 +21,14 @@ class CheckLocalFileCommand(CommandBase):
 
             if local_file_path == "" or signature == "":
                 missing_params = []
-                if local_file_path is None:
-                    missing_params.append("param1")
-                if signature is None:
-                    missing_params.append("param2")
+                if local_file_path == "":
+                    missing_params.append("local file path - param1")
+                if signature == "":
+                    missing_params.append("signature - param2")
 
                 self._send_response(
                     request,
-                    f"Invalid query format. Parameters missing: {', '.join(missing_params)}.",
+                    f"Invalid query format. Parameters cannot be empty: {', '.join(missing_params)}.",
                     logger.info
                 )
                 return
