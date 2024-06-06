@@ -1,6 +1,6 @@
 import socket
-from abc import ABC
 
+from abc import ABC
 from src.server.responsibility_chain import CommandBase
 from src.server.threaded_tcp_server import ThreadedTCPServer
 

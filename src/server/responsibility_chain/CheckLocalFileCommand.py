@@ -1,6 +1,5 @@
 import json
 import socket
-from typing import List, Callable
 
 from src.server.config import logger
 from src.server.responsibility_chain.CommandBase import CommandBase
@@ -69,7 +68,7 @@ class CheckLocalFileCommand(CommandBase):
             self._send_response(request, "Error processing file", lambda msg: logger.error(f"{msg}: {str(e)}"))
 
     @staticmethod
-    def __find_signature_offsets(content: bytes, signature: bytes) -> List[int]:
+    def __find_signature_offsets(content: bytes, signature: bytes) -> list[int]:
         offsets = []
         offset = content.find(signature)
         while offset != -1:
