@@ -1,6 +1,5 @@
 import os
 import shutil
-
 import pytest
 
 
@@ -57,11 +56,9 @@ def test_move_file_to_quarantine(start_server, start_client):
         if case == 2:
             assert os.path.exists(second_quarantine_file_path) is True
 
-    if os.path.exists(quarantine_file_path):
-        os.remove(quarantine_file_path)
-
-    if os.path.exists(second_quarantine_file_path):
-        os.remove(second_quarantine_file_path)
+    for path in [quarantine_file_path, second_quarantine_file_path]:
+        if os.path.exists(path):
+            os.remove(path)
 
     if os.path.exists(second_file_directory):
         shutil.rmtree(second_file_directory)
