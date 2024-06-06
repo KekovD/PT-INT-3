@@ -1,16 +1,12 @@
 import json
 
 from src.server.config import logger
-from src.server.responsibility_chain.CommandBase import CommandBase
+from src.server.tcp_handler.TCPHandlerBase import TCPHandlerBase
 
 
-class TCPHandler:
-    def __init__(self, request, client_address, server, command_chain: CommandBase):
-        self.data = None
-        self.request = request
-        self.client_address = client_address
-        self.server = server
-        self.command_chain = command_chain
+class TCPHandler(TCPHandlerBase):
+    def __init__(self, request, client_address, server, command_chain):
+        super().__init__(request, client_address, server, command_chain)
         self.handle()
 
     def handle(self) -> None:

@@ -1,4 +1,4 @@
-from src.server.TCPHandler import TCPHandler
+from src.server.tcp_handler.TCPHandler import TCPHandler
 from src.server.ThreadedTCPServer import ThreadedTCPServer
 from src.server.responsibility_chain.CheckLocalFileCommand import CheckLocalFileCommand
 from src.server.responsibility_chain.QuarantineLocalFileCommand import QuarantineLocalFileCommand
