@@ -21,6 +21,21 @@ class TCPHandler(TCPHandlerBase):
     def handle(self) -> None:
         try:
             self.data = self.request.recv(2048).strip()
+
+            if len(self.data) >= 2048:
+                try:
+                    additional_data = self.request.recv(1, socket.MSG_PEEK)
+
+                    if additional_data:
+                        raise ValueError()
+
+                except ValueError:
+                    response = "Message exceeds 2048 bytes. Request too large.".encode("utf-8")
+                    self.request.sendall(response)
+                    logger.warning("Message exceeds 2048 bytes. Request too large.")
+                    self.request.close()
+                    return
+
             self.data = json.loads(self.data)
 
         except json.JSONDecodeError:
