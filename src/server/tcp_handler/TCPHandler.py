@@ -20,7 +20,7 @@ class TCPHandler(TCPHandlerBase):
 
     def handle(self) -> None:
         try:
-            self.data = self.request.recv(1024).strip()
+            self.data = self.request.recv(2048).strip()
             self.data = json.loads(self.data)
 
         except json.JSONDecodeError:
