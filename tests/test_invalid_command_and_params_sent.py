@@ -12,9 +12,6 @@ def send_and_receive(host: str, port: str, data: str) -> str:
 
 @pytest.mark.parametrize("start_server", [{"threads": 10}], indirect=True)
 def test_invalid_command_and_params_sent(start_server, start_client, host, port):
-    server_process = start_server
-    assert server_process is not None
-
     long_signature = ""
 
     while len(long_signature) < 1100:
