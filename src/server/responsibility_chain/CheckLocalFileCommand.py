@@ -1,12 +1,14 @@
 import json
+import socket
 from typing import List, Callable
 
 from src.server.config import logger
 from src.server.responsibility_chain.CommandBase import CommandBase
+from src.server.threaded_tcp_server import ThreadedTCPServer
 
 
 class CheckLocalFileCommand(CommandBase):
-    def handle(self, request, data: json, server):
+    def handle(self, request: socket.socket, data: json, server: ThreadedTCPServer) -> None:
         if data.get("command") == 'CheckLocalFile':
             required_params = {"param1", "param2"}
             provided_params = set(data["params"].keys())
@@ -48,7 +50,7 @@ class CheckLocalFileCommand(CommandBase):
         else:
             self._send_response(request, f"Unknown command '{data}'.", logger.warning)
 
-    def check_file_signature(self, file_path: str, signature: bytes, request):
+    def check_file_signature(self, file_path: str, signature: bytes, request: socket.socket) -> None:
         try:
             with open(file_path, 'rb') as file:
                 file_content = file.read()

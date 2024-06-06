@@ -1,7 +1,9 @@
 import json
+import socket
 from abc import ABC, abstractmethod
 
 from src.server.config import logger
+from src.server.threaded_tcp_server import ThreadedTCPServer
 
 
 class CommandBase(ABC):
@@ -35,12 +37,12 @@ class CommandBase(ABC):
         return True
 
     @staticmethod
-    def _send_response(request, message, log_func):
+    def _send_response(request: socket.socket, message: str, log_func: logger) -> None:
         response = message.encode("utf-8")
         request.sendall(response)
         log_func(message)
         request.close()
 
     @abstractmethod
-    def handle(self, request, data: json, server):
+    def handle(self, request: socket.socket, data: json, server: ThreadedTCPServer) -> None:
         pass

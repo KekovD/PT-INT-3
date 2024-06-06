@@ -1,14 +1,16 @@
 import json
 import os
 import shutil
+import socket
 
 from src.server.config import logger
 from src.server.responsibility_chain.CommandBase import CommandBase
+from src.server.threaded_tcp_server import ThreadedTCPServer
 
 
 class QuarantineLocalFileCommand(CommandBase):
 
-    def handle(self, request, data: json, server):
+    def handle(self, request: socket.socket, data: json, server: ThreadedTCPServer) -> None:
         if data.get("command") == 'QuarantineLocalFile':
             required_params = {"param1"}
             provided_params = set(data["params"].keys())
@@ -31,7 +33,7 @@ class QuarantineLocalFileCommand(CommandBase):
         else:
             self._send_response(request, f"Unknown command '{data}'.", logger.warning)
 
-    def __ensure_directory_exists(self, path: str, request):
+    def __ensure_directory_exists(self, path: str, request: socket.socket) -> None:
         try:
             if not os.path.exists(path):
                 os.makedirs(path)
@@ -40,7 +42,7 @@ class QuarantineLocalFileCommand(CommandBase):
         except Exception as e:
             self._send_response(request, f"Error creating directory {path}: {e}", logger.error)
 
-    def __move_file_to_quarantine(self, src_path, dest_path, request):
+    def __move_file_to_quarantine(self, src_path: str, dest_path: str, request: socket.socket) -> None:
         try:
             shutil.move(src_path, dest_path)
             message = f"File moved from {src_path} to quarantine {dest_path}"

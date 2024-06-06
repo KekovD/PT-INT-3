@@ -1,11 +1,20 @@
 import json
+import socket
 
 from src.server.config import logger
+from src.server.responsibility_chain import CommandBase
 from src.server.tcp_handler.TCPHandlerBase import TCPHandlerBase
+from src.server.threaded_tcp_server import ThreadedTCPServer
 
 
 class TCPHandler(TCPHandlerBase):
-    def __init__(self, request, client_address, server, command_chain):
+    def __init__(
+            self,
+            request: socket.socket,
+            client_address: tuple[str, int],
+            server: ThreadedTCPServer,
+            command_chain: CommandBase
+    ):
         super().__init__(request, client_address, server, command_chain)
         self.handle()
 
