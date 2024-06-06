@@ -39,8 +39,9 @@ class TCPHandler(TCPHandlerBase):
         if request:
             required_keys = {"command", "params"}
             actual_keys = set(request.keys())
-            extra_keys = required_keys.difference(actual_keys)
+
             missing_keys = required_keys.difference(actual_keys)
+            extra_keys = actual_keys.difference(required_keys)
 
             error_messages = []
 
