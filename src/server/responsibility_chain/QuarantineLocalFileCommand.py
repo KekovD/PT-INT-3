@@ -20,7 +20,7 @@ class QuarantineLocalFileCommand(CommandBase):
 
             local_file_path = data.get("params", {}).get("param1")
 
-            if local_file_path is None:
+            if local_file_path == "":
                 self._send_response(request, "Invalid query format. Local file path missing in param1.", logger.info)
                 return
 

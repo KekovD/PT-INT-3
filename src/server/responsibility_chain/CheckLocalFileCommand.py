@@ -19,7 +19,7 @@ class CheckLocalFileCommand(CommandBase):
             local_file_path = data.get("params", {}).get("param1")
             signature = data.get("params", {}).get("param2")
 
-            if local_file_path is None or signature is None:
+            if local_file_path == "" or signature == "":
                 missing_params = []
                 if local_file_path is None:
                     missing_params.append("param1")
