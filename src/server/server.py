@@ -10,7 +10,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Start the TCP Server with specified parameters.")
     parser.add_argument('HOST', type=str, help='Hostname or IP address to bind the server to.')
     parser.add_argument('PORT', type=int, help='Port number to bind the server to.')
-    parser.add_argument('MAX_THREADS', type=int, help='Maximum number of threads for the server.')
+    parser.add_argument('MAX_THREADS', type=int, help='Maximum number of threads for server handlers.')
     parser.add_argument('QUARANTINE_PATH', type=str, help='Path to the quarantine directory.')
 
     return parser.parse_args()
