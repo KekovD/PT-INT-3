@@ -29,7 +29,7 @@ def main():
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
             sock.connect((host, port))
             sock.sendall(data.encode('utf-8'))
-            received = sock.recv(1024)
+            received = sock.recv(2048)
     except Exception as e:
         print(f"Error: {e}")
         return
