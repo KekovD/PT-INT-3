@@ -5,18 +5,18 @@ import json
 
 def main():
     parser = argparse.ArgumentParser(description="TCP client script")
-    parser.add_argument("host", type=str, help="Host to connect to")
-    parser.add_argument("port", type=int, help="Port to connect to")
-    parser.add_argument("command", type=str, help="Command to send")
-    parser.add_argument("params", nargs='+', help="List of parameters in the form 'param_name=param_value'")
+    parser.add_argument("HOST", type=str, help="Host to connect to")
+    parser.add_argument("PORT", type=int, help="Port to connect to")
+    parser.add_argument("COMMAND", type=str, help="Command to send")
+    parser.add_argument("PARAMS", nargs='+', help="List of parameters in the form 'param_name=param_value'")
 
     args = parser.parse_args()
 
-    host, port = args.host, args.port
-    command = args.command
+    host, port = args.HOST, args.PORT
+    command = args.COMMAND
     params = {}
 
-    for param in args.params:
+    for param in args.PARAMS:
         name, value = param.split('=', 1)
         params[name] = value
 

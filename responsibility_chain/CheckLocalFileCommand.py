@@ -1,9 +1,9 @@
 import json
 import socket
 
-from src.server.config import logger
-from src.server.responsibility_chain.CommandBase import CommandBase
-from src.server.threaded_tcp_server import ThreadedTCPServer
+from server_config import logger
+from responsibility_chain.CommandBase import CommandBase
+from threaded_tcp_server import ThreadedTCPServer
 
 
 class CheckLocalFileCommand(CommandBase):

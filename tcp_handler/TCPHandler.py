@@ -1,10 +1,10 @@
 import json
 import socket
 
-from src.server.config import logger
-from src.server.responsibility_chain import CommandBase
-from src.server.tcp_handler.TCPHandlerBase import TCPHandlerBase
-from src.server.threaded_tcp_server import ThreadedTCPServer
+from server_config import logger
+from responsibility_chain import CommandBase
+from tcp_handler.TCPHandlerBase import TCPHandlerBase
+from threaded_tcp_server import ThreadedTCPServer
 
 
 class TCPHandler(TCPHandlerBase):

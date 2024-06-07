@@ -1,8 +1,8 @@
 import socket
 
 from abc import ABC
-from src.server.responsibility_chain import CommandBase
-from src.server.threaded_tcp_server import ThreadedTCPServer
+from responsibility_chain import CommandBase
+from threaded_tcp_server import ThreadedTCPServer
 
 
 class TCPHandlerBase(ABC):

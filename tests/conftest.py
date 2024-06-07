@@ -17,7 +17,7 @@ def port():
 
 @pytest.fixture(scope='session')
 def server_script():
-    return "../src/server/server.py"
+    return "../server.py"
 
 
 @pytest.fixture(scope='session')
@@ -47,7 +47,7 @@ def start_client(request, host, port):
         command = params['command']
         client_params = params['params']
 
-        client_script = "../src/client/client.py"
+        client_script = "../client/client.py"
 
         params_list = [f"{k}={v}" for k, v in client_params.items()]
         client_args = ["python", client_script, host, port, command] + params_list

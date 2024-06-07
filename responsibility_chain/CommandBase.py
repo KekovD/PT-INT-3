@@ -2,8 +2,8 @@ import json
 import socket
 
 from abc import ABC, abstractmethod
-from src.server.config import logger
-from src.server.threaded_tcp_server import ThreadedTCPServer
+from server_config import logger
+from threaded_tcp_server import ThreadedTCPServer
 
 
 class CommandBase(ABC):
