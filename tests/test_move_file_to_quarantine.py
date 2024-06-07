@@ -56,8 +56,6 @@ def test_move_file_to_quarantine(start_server, start_client):
         client_output = start_client(params)
         assert massage in client_output
 
-        if case == 0:
-            assert os.path.exists(quarantine_directory) is True
         if case == 1:
             assert os.path.exists(quarantine_file_path) is True
         if case == 2:

@@ -25,23 +25,12 @@ class QuarantineLocalFileCommand(CommandBase):
                     request, "Invalid query format. Local file path cannot be empty in param1.", logger.info)
                 return
 
-            self.__ensure_directory_exists(server.quarantine_path, request)
-
             self.__move_file_to_quarantine(local_file_path, server.quarantine_path, request)
 
         elif self.next is not None:
             self.next.handle(request, data, server)
         else:
             self._send_response(request, f"Unknown command '{data}'.", logger.warning)
-
-    def __ensure_directory_exists(self, path: str, request: socket.socket) -> None:
-        try:
-            if not os.path.exists(path):
-                os.makedirs(path)
-        except PermissionError:
-            self._send_response(request, f"Permission denied to create directory {path}", logger.warning)
-        except Exception as e:
-            self._send_response(request, f"Error creating directory {path}: {e}", logger.error)
 
     def __move_file_to_quarantine(self, src_path: str, dest_path: str, request: socket.socket) -> None:
         if os.path.isdir(src_path):

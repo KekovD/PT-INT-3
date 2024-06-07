@@ -1,7 +1,9 @@
+import os
 import socket
 
 from concurrent.futures import ThreadPoolExecutor
 from responsibility_chain import CommandBase
+from server_config import logger
 from tcp_handler import TCPHandlerBase
 
 
@@ -26,6 +28,9 @@ class ThreadedTCPServer:
             print(f"The thread number {self.max_threads} must be positive and non-null")
             return
 
+        if not self.__ensure_directory_exists(self.quarantine_path):
+            return
+
         with ThreadPoolExecutor(max_workers=self.max_threads) as executor:
             self.is_running = True
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
@@ -45,3 +50,23 @@ class ThreadedTCPServer:
 
     def stop(self) -> None:
         self.is_running = False
+
+    @staticmethod
+    def __ensure_directory_exists(path: str) -> bool:
+        try:
+            if os.path.isfile(path):
+                print(f"Error: QUARANTINE_PATH is a file, not a directory.")
+                return False
+
+            if not os.path.exists(path):
+                os.makedirs(path)
+
+            return True
+
+        except PermissionError:
+            print(f"Permission denied to create directory {path}")
+            return False
+
+        except Exception as e:
+            print(f"Error creating directory {path}: {e}")
+            return False
