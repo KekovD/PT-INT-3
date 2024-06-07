@@ -28,11 +28,15 @@ def test_move_file_to_quarantine(start_server, start_client):
     with open(second_file_path, 'w') as file:
         file.write("This is a second quarantine file.")
 
+    # protected_file_path = os.path.join(project_root, 'files_for_tests/protected_file.txt')
+
     client_params_list = [
         {"command": "QuarantineLocalFile", "params": {"param1": "/nonexistent/file/tmp"}},
         {"command": "QuarantineLocalFile", "params": {"param1": file_path}},
         {"command": "QuarantineLocalFile", "params": {"param1": second_file_path}},
         {"command": "QuarantineLocalFile", "params": {"param1": file_path}},
+        # {"command": "QuarantineLocalFile", "params": {"param1": protected_file_path}},
+        # For last case, you need to create a file that is only accessible to the root user or any other group
     ]
 
     massages = [
@@ -40,6 +44,7 @@ def test_move_file_to_quarantine(start_server, start_client):
         f"Received: File moved from {file_path} to quarantine",
         f"Received: File moved from {second_file_path} to quarantine",
         f"Received: File not found:",
+        # f"Received: Permission denied to {protected_file_path}",
     ]
 
     quarantine_file_path = os.path.join(quarantine_directory, quarantine_file)
