@@ -35,6 +35,7 @@ def test_move_file_to_quarantine(start_server, start_client):
         {"command": "QuarantineLocalFile", "params": {"param1": file_path}},
         {"command": "QuarantineLocalFile", "params": {"param1": second_file_path}},
         {"command": "QuarantineLocalFile", "params": {"param1": file_path}},
+        {"command": "QuarantineLocalFile", "params": {"param1": file_directory}},
         # {"command": "QuarantineLocalFile", "params": {"param1": protected_file_path}},
         # For last case, you need to create a file that is only accessible to the root user or any other group
     ]
@@ -44,6 +45,7 @@ def test_move_file_to_quarantine(start_server, start_client):
         f"Received: File moved from {file_path} to quarantine",
         f"Received: File moved from {second_file_path} to quarantine",
         f"Received: File not found:",
+        f"Received: {file_directory} is a directory, not a file",
         # f"Received: Permission denied to {protected_file_path}",
     ]
 

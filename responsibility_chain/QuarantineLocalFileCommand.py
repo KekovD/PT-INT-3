@@ -44,6 +44,10 @@ class QuarantineLocalFileCommand(CommandBase):
             self._send_response(request, f"Error creating directory {path}: {e}", logger.error)
 
     def __move_file_to_quarantine(self, src_path: str, dest_path: str, request: socket.socket) -> None:
+        if os.path.isdir(src_path):
+            self._send_response(request, f"{src_path} is a directory, not a file", logger.warning)
+            return
+
         try:
             self.__move_with_suffix(src_path, dest_path)
             message = f"File moved from {src_path} to quarantine {dest_path}"
