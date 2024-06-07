@@ -1,4 +1,5 @@
 import json
+import os
 import socket
 
 from server_config import logger
@@ -50,6 +51,10 @@ class CheckLocalFileCommand(CommandBase):
             self._send_response(request, f"Unknown command '{data}'.", logger.warning)
 
     def check_file_signature(self, file_path: str, signature: bytes, request: socket.socket) -> None:
+        if os.path.isdir(file_path):
+            self._send_response(request, f"{file_path} is a directory, not a file", logger.warning)
+            return
+
         try:
             with open(file_path, 'rb') as file:
                 file_content = file.read()
