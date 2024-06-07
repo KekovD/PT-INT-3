@@ -16,12 +16,16 @@ def port():
 
 
 @pytest.fixture(scope='session')
+def server_script():
+    return "../src/server/server.py"
+
+
+@pytest.fixture(scope='session')
 @pytest.mark.usefixtures('host')
 @pytest.mark.usefixtures('port')
-def start_server(request, host, port):
+@pytest.mark.usefixtures('server_script')
+def start_server(request, host, port, server_script):
     threads = request.param['threads']
-
-    server_script = "../src/server/server.py"
 
     project_root = os.path.abspath(os.path.dirname(__file__))
     quarantine_dir = os.path.join(project_root, "quarantine")
