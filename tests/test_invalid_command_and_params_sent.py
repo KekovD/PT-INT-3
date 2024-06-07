@@ -76,7 +76,16 @@ def send_and_receive(host: str, port: str, data: str) -> str:
         ),
     ]
 )
-def test_invalid_command_and_params_sent(start_server, start_client, host, port, client_params, expected_error_msg, data, expected_result):
+def test_invalid_command_and_params_sent(
+        start_server,
+        start_client,
+        host,
+        port,
+        client_params,
+        expected_error_msg,
+        data,
+        expected_result
+):
     if client_params:
         client_output = start_client(client_params)
         assert expected_error_msg in client_output
