@@ -21,14 +21,14 @@ def server_script():
 
 
 @pytest.fixture(scope='session')
-@pytest.mark.usefixtures('host')
-@pytest.mark.usefixtures('port')
-@pytest.mark.usefixtures('server_script')
-def start_server(request, host, port, server_script):
-    threads = request.param['threads']
+def quarantine_dir():
+    return os.path.join(os.path.dirname(__file__), 'quarantine')
 
-    project_root = os.path.abspath(os.path.dirname(__file__))
-    quarantine_dir = os.path.join(project_root, "quarantine")
+
+@pytest.fixture(scope='session')
+@pytest.mark.usefixtures('host', 'port', 'server_script', 'quarantine_dir')
+def start_server(request, host, port, server_script, quarantine_dir):
+    threads = request.param['threads']
 
     args = ["python", server_script, host, port, str(threads), quarantine_dir]
 
@@ -43,8 +43,7 @@ def start_server(request, host, port, server_script):
 
 
 @pytest.fixture(scope='session')
-@pytest.mark.usefixtures('host')
-@pytest.mark.usefixtures('port')
+@pytest.mark.usefixtures('host', 'port')
 def start_client(request, host, port):
     def _start_client(params):
         command = params['command']
