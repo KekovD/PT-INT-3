@@ -26,7 +26,6 @@ def quarantine_dir():
 
 
 @pytest.fixture(scope='session')
-@pytest.mark.usefixtures('host', 'port', 'server_script', 'quarantine_dir')
 def start_server(request, host, port, server_script, quarantine_dir):
     threads = request.param['threads']
 
@@ -43,7 +42,6 @@ def start_server(request, host, port, server_script, quarantine_dir):
 
 
 @pytest.fixture(scope='session')
-@pytest.mark.usefixtures('host', 'port')
 def start_client(request, host, port):
     def _start_client(params):
         command = params['command']
