@@ -17,17 +17,7 @@ def test_invalid_command_and_params_sent(start_server, start_client, host, port)
     while len(large_signature) < 1100:
         large_signature += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
-    project_root = os.path.dirname(os.path.abspath(__file__))
-    file_path = os.path.join(os.path.join(project_root, 'files_for_tests/text.txt'))
-    large_request = ""
-
-    try:
-        with open(file_path, 'r', encoding='utf-8') as file:
-            large_request = file.read()
-    except FileNotFoundError:
-        print(f"File not found: {file_path}")
-    except Exception as e:
-        print(f"An error occurred while reading the file: {e}")
+    large_request = large_signature + large_signature
 
     client_params_list = [
         {"command": "example_command", "params": {"param1": "value1"}},
